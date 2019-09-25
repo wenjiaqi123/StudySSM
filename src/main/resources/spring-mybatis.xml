@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--读取jdbc配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--使用数据库连接池，配置数据源-->
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc_driverClassName}"/>
+        <property name="url" value="${jdbc_url}"/>
+        <property name="username" value="${jdbc_userName}"/>
+        <property name="password" value="${jdbc_password}"/>
+    </bean>
+
+    <!--
+    配置sqlSessionFactory
+    3个原料：数据源，mybatis配置文件，mapper配置文件
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="mapperLocations" value="classpath:com/gsm/dao/*.xml"/>
+    </bean>
+    <!--
+    mapper扫描，生成代理类
+    2个原料：dao的包，sqlSessionFactory
+    -->
+    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描 dao的包-->
+        <property name="basePackage" value="com.gsm.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!--事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--事务管理器规则-->
+    <tx:advice id="interceptor" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="insert*" read-only="false"/>
+            <tx:method name="delete*" read-only="false"/>
+            <tx:method name="update*" read-only="false"/>
+            <tx:method name="select*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--aop切面切点配置-->
+    <aop:config>
+        <aop:pointcut id="pointcut" expression="execution(* com.gsm.service.impl.*ServiceImpl.*(..))"/>
+        <aop:advisor advice-ref="interceptor" pointcut-ref="pointcut"/>
+    </aop:config>
+</beans>

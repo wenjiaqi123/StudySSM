@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <!--别名，扫描该包下类，别名大小写不敏感-->
+    <typeAliases>
+        <package name="com.gsm.model"/>
+        <package name="com.gsm.po"/>
+        <package name="com.gsm.vo"/>
+        <package name="com.gsm.dto"/>
+    </typeAliases>
+</configuration>
