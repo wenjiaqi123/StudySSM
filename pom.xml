@@ -22,7 +22,7 @@
         <commons.logging>1.1.1</commons.logging>
         <log4j.core>2.8.2</log4j.core>
         <log4j>1.2.17</log4j>
-        <junit>4.12</junit>
+        <junit>4.13.1</junit>
         <druid>1.1.6</druid>
         <mysql.connector.java>6.0.6</mysql.connector.java>
         <spring.aspects>4.3.14.RELEASE</spring.aspects>
