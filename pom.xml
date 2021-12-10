@@ -20,7 +20,7 @@
         <spring.version>5.0.2.RELEASE</spring.version>
         <spring.context.support>4.3.14.RELEASE</spring.context.support>
         <commons.logging>1.1.1</commons.logging>
-        <log4j.core>2.8.2</log4j.core>
+        <log4j.core>2.15.0</log4j.core>
         <log4j>1.2.17</log4j>
         <junit>4.12</junit>
         <druid>1.1.6</druid>
